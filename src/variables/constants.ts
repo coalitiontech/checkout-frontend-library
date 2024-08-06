@@ -203,6 +203,12 @@ export const apiTypes: IApiTypes = {
         useJwt: true,
         keysToTest: [keysToTestFromResponse.applicationState]
     },
+    dispatchAppHookEvent: {
+        path: '/app_hook',
+        method: methods.POST,
+        useJwt: true,
+        keysToTest: [...appStateKeysToTest]
+    },
     getApplicationState: {
         path: '/refresh',
         method: methods.GET,
@@ -337,6 +343,7 @@ export const apiTypeKeys: IApiTypeKeys = {
     getPaymentIframe: 'getPaymentIframe',
     cssStylingPaymentIframe: 'cssStylingPaymentIframe',
     processOrder: 'processOrder',
+    dispatchAppHookEvent: 'dispatchAppHookEvent',
     getApplicationState: 'getApplicationState',
     deleteBillingAddress: 'deleteBillingAddress',
     deleteShippingAddress: 'deleteShippingAddress',

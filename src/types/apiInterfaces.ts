@@ -295,6 +295,7 @@ export interface IApiTypes {
     walletPayCreateOrder: IApiTypesDetail,
     walletPayOnShipping: IApiTypesDetail,
     walletPayOnApprove: IApiTypesDetail,
+    dispatchAppHookEvent: IApiTypesDetail,
 }
 
 export interface IApiTypeKeys {
@@ -334,6 +335,7 @@ export interface IApiTypeKeys {
     walletPayCreateOrder: keyof  IApiTypes;
     walletPayOnShipping: keyof  IApiTypes;
     walletPayOnApprove: keyof  IApiTypes;
+    dispatchAppHookEvent: keyof IApiTypes;
 }
 
 export interface IValidateAddress {
@@ -839,6 +841,7 @@ export type IGetApiOptionsBody =
     IWalletPayOnApproveRequest |
     IWalletPayCreateOrderRequest |
     IWalletPayOnShippingRequest |
+    IDispatchAppHookEventRequest |
     Record<string, unknown>;
 
 export interface IShippingLine {
@@ -872,3 +875,9 @@ export interface IInventoryFailedItems {
     platform_variant_id: string,
     available_quantity: number
 }
+
+export interface IDispatchAppHookEventRequest {
+    uuid: string;
+    hook: string;
+    app_hook_data?: object;
+ }
