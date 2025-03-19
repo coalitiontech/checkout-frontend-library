@@ -27,7 +27,7 @@ import {
 export const environment: Required<IEnvironment> = {
     type: environmentTypes.production,
     url: environmentUrls.production,
-    path: environmentPath
+    path: environmentPath,
 };
 
 export const auth: IAuth = {
@@ -111,7 +111,8 @@ export const shipping: IShipping = {
     selected_shipping: {
         id: '',
         description: '',
-        amount: 0
+        amount: 0,
+        code: '',
     },
     available_shipping_lines: [],
     taxes: [],
@@ -191,7 +192,7 @@ export const applicationState: IApplicationState = {
     created_via: '',
     is_processed: false,
     fees,
-    flow_id: null
+    flow_id: null,
 };
 
 export const orderInitialData: IOrderInitialData = {
@@ -202,8 +203,10 @@ export const orderInitialData: IOrderInitialData = {
     alternative_payment_methods: [],
     external_payment_gateways: [],
     life_elements: [],
+    fraud_tools: [],
     flow_settings: {},
     requires_shipping: true,
+    eps_gateways: {},
 };
 
 export const retryErrorCodeList: Array<number> = [

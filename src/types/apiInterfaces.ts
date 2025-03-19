@@ -26,6 +26,7 @@ export interface IApiSuccessResponse {
         IPatchOrderMetaDataResponse |
         IAddLogResponse;
     application_state?: IApplicationState;
+    clientSecretToken?: string;
 }
 
 export interface IApiSubrequestSuccessResponse extends IApiSuccessResponse {
@@ -108,6 +109,7 @@ export interface IAlternatePaymentMethodType {
     BRAINTREE_GOOGLE: string;
     BRAINTREE_APPLE: string;
     PPCP_APPLE: string;
+    PPCP_GOOGLE: string;
     PPCP: string;
 }
 
@@ -400,8 +402,10 @@ export interface IOrderInitialData {
     alternative_payment_methods: IAlternativePaymentMethod;
     external_payment_gateways:  IExternalPaymentGateways;
     life_elements: Array<ILifeField>;
+    fraud_tools: Array<IFraudTool>;
     flow_settings: Record<string, unknown>;
     requires_shipping: boolean;
+    eps_gateways: IEpsGateways;
 }
 
 export interface ISupportedLanguage {
@@ -430,6 +434,15 @@ export interface ICountryInformation {
     provinces:        Array<IProvince>;
     valid_for_shipping: boolean;
     valid_for_billing:  boolean;
+}
+
+export interface IEpsGateways {
+    [gateway_id: string]: IEpsGateway,
+}
+export interface IEpsGateway {
+    auth_token: string;
+    currency: string;
+    group_label?: string;
 }
 
 export interface ICheckoutProcess{
@@ -472,6 +485,7 @@ export interface IExpressPayPaypalCommercePlatform {
     is_test: boolean;
     public_id: string;
     apple_pay_enabled: boolean;
+    google_pay_enabled: boolean;
     partner_id: string;
     merchant_id: string;
     fastlane_styles: Record<string, unknown>
@@ -484,6 +498,7 @@ export interface IExpressPayPaypalCommercePlatformButton {
     'is_3ds_enabled': boolean,
     'style': Record<string, unknown>,
     'apple_pay_enabled': boolean,
+    'google_pay_enabled': boolean;
     'type': string,
     'merchant_country': string,
     'payment_types': Record<string, unknown>,
@@ -528,6 +543,12 @@ export interface IExternalPaymentGateway {
     public_id: string;
     location: string;
     currency: string;
+}
+
+export interface IFraudTool {
+    id: string;
+    type: string;
+    credentials: Record<string, unknown>;
 }
 
 export interface ILifeField {
@@ -819,16 +840,19 @@ export interface IWalletPayOnApprovePaypalPayload {
 
 export interface IWalletPayCreateOrderRequest{
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayCreateOrderPaypalPayload | Record<string, unknown>
 }
 
 export interface IWalletPayOnShippingRequest{
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayOnShippingPaypalPayload | Record<string, unknown>
 }
 
 export interface IWalletPayOnApproveRequest{
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayOnApprovePaypalPayload | Record<string, unknown>
 }
 
@@ -874,6 +898,7 @@ export interface IShippingLine {
     id: string;
     description: string;
     amount: number;
+    code: string;
 }
 
 export interface IPigiActionType {
