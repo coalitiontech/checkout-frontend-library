@@ -1,7 +1,8 @@
 import { IFetchError } from "..";
 export interface IApiSuccessResponse {
-    data?: ISessionStartApiResponse | IAddGuestCustomerResponse | IDeleteCustomerResponse | ISetShippingAddressResponse | ISetBillingAddressResponse | IGetShippingLinesResponse | IChangeShippingLineResponse | IAddDiscountResponse | ISetTaxesResponse | IDeleteDiscountResponse | IGetPaymentIframeUrl | IInitializeOrderResponse | ICssStylingPaymentIframeResponse | ICheckInventoryResponse | IAddPaymentResponse | IWalletPayCreateOrderResponse | IWalletPayOnShippingResponse | IWalletPayOnApproveResponse | IUpdateLineItemQuantityResponse | IProcessOrderResponse | IPatchOrderMetaDataResponse | IAddLogResponse;
+    data?: ISessionStartApiResponse | IAddGuestCustomerResponse | IDeleteCustomerResponse | ISetShippingAddressResponse | ISetBillingAddressResponse | IGetShippingLinesResponse | IChangeShippingLineResponse | IAddDiscountResponse | ISetTaxesResponse | IDeleteDiscountResponse | IGetPaymentIframeUrl | IInitializeOrderResponse | IInitializeSimpleOrderResponse | ICssStylingPaymentIframeResponse | ICheckInventoryResponse | IAddPaymentResponse | IWalletPayCreateOrderResponse | IWalletPayOnShippingResponse | IWalletPayOnApproveResponse | IUpdateLineItemQuantityResponse | IProcessOrderResponse | IPatchOrderMetaDataResponse | IAddLogResponse;
     application_state?: IApplicationState;
+    clientSecretToken?: string;
 }
 export interface IApiSubrequestSuccessResponse extends IApiSuccessResponse {
     endpoint: string;
@@ -47,6 +48,7 @@ export interface IPigiActionTypes {
     PIGI_PAYMENT_ADDED: string;
     PIGI_DISPLAY_IN_FULL_PAGE: string;
     PIGI_DISPLAY_IN_FULL_PAGE_DONE: string;
+    PIGI_HIDE_CREDIT_CARD_OPTION: string;
 }
 export interface IExternalPaymentGatewayToParentActionTypes {
     EXTERNAL_PAYMENT_GATEWAY_ADD_PAYMENT: string;
@@ -72,9 +74,10 @@ export interface IAlternatePaymentMethodType {
     BRAINTREE_GOOGLE: string;
     BRAINTREE_APPLE: string;
     PPCP_APPLE: string;
+    PPCP_GOOGLE: string;
     PPCP: string;
 }
-export declare type IInventoryStage = 'initial' | 'final';
+export type IInventoryStage = 'initial' | 'final';
 export interface ICheckInventoryStage {
     initial: IInventoryStage;
     final: IInventoryStage;
@@ -83,7 +86,7 @@ export interface IApiReturnObject {
     status: number;
     success: boolean;
     error: null | IFetchError;
-    response: null | IApiResponse | IApiBatchResponse;
+    response: null | IApiResponse | IApiBatchResponse | IInitializeSimpleOrderResponse;
 }
 export interface IFetchCallback extends Function {
     (obj: IApiReturnObject): void;
@@ -91,6 +94,11 @@ export interface IFetchCallback extends Function {
 export interface IInitializeOrderResponse {
     initial_data: IOrderInitialData;
     application_state: IApplicationState;
+    jwt_token: string;
+    public_order_id: string;
+}
+export interface IInitializeSimpleOrderResponse {
+    flow_settings: Record<string, unknown>;
     jwt_token: string;
     public_order_id: string;
 }
@@ -112,7 +120,7 @@ export interface IAddGuestCustomerResponse {
     customer: ICustomer | undefined;
     application_state: IApplicationState | undefined;
 }
-export declare type IDeleteCustomerResponse = IAddGuestCustomerResponse;
+export type IDeleteCustomerResponse = IAddGuestCustomerResponse;
 export interface IAddDiscountResponse {
     discount: IDiscount | undefined;
     application_state: IApplicationState | undefined;
@@ -229,6 +237,8 @@ export interface IApiTypes {
     walletPayCreateOrder: IApiTypesDetail;
     walletPayOnShipping: IApiTypesDetail;
     walletPayOnApprove: IApiTypesDetail;
+    estimateShippingLines: IApiTypesDetail;
+    estimateTaxes: IApiTypesDetail;
     dispatchAppHookEvent: IApiTypesDetail;
 }
 export interface IApiTypeKeys {
@@ -268,6 +278,8 @@ export interface IApiTypeKeys {
     walletPayCreateOrder: keyof IApiTypes;
     walletPayOnShipping: keyof IApiTypes;
     walletPayOnApprove: keyof IApiTypes;
+    estimateShippingLines: keyof IApiTypes;
+    estimateTaxes: keyof IApiTypes;
     dispatchAppHookEvent: keyof IApiTypes;
 }
 export interface IValidateAddress {
@@ -296,15 +308,15 @@ export interface ICheckInventory {
 export interface IValidateDiscount {
     discount_code: string;
 }
-export declare type IApiUrlQueryParams = IValidateEmail | IValidateAddress | IPaymentFrame | ICheckInventory | IValidateDiscount;
+export type IApiUrlQueryParams = IValidateEmail | IValidateAddress | IPaymentFrame | ICheckInventory | IValidateDiscount;
 export interface IApiTypesDetail {
     path: string;
     method: string;
     useJwt: boolean;
     keysToTest?: Array<string>;
 }
-export declare type IAlternativePaymentMethod = Array<IExpressPayStripe | IExpressPayPaypal | IExpressPayBraintreeGoogle | IExpressPayBraintreeApple | IExpressPayPaypalCommercePlatform | IExpressPayPaypalCommercePlatformButton>;
-export declare type IExternalPaymentGateways = Array<IExternalPaymentGateway>;
+export type IAlternativePaymentMethod = Array<IExpressPayStripe | IExpressPayPaypal | IExpressPayBraintreeGoogle | IExpressPayBraintreeApple | IExpressPayPaypalCommercePlatform | IExpressPayPaypalCommercePlatformButton | IExpressPayBraintreePayPal | IExpressPayBraintreeFastlane>;
+export type IExternalPaymentGateways = Array<IExternalPaymentGateway>;
 export interface IOrderInitialData {
     shop_name: string;
     country_info: Array<ICountryInformation>;
@@ -313,8 +325,10 @@ export interface IOrderInitialData {
     alternative_payment_methods: IAlternativePaymentMethod;
     external_payment_gateways: IExternalPaymentGateways;
     life_elements: Array<ILifeField>;
+    fraud_tools: Array<IFraudTool>;
     flow_settings: Record<string, unknown>;
     requires_shipping: boolean;
+    eps_gateways: IEpsGateways;
 }
 export interface ISupportedLanguage {
     id: number;
@@ -342,13 +356,21 @@ export interface ICountryInformation {
     valid_for_shipping: boolean;
     valid_for_billing: boolean;
 }
+export interface IEpsGateways {
+    [gateway_id: string]: IEpsGateway;
+}
+export interface IEpsGateway {
+    auth_token: string;
+    currency: string;
+    group_label?: string;
+}
 export interface ICheckoutProcess {
     company_name_option: string;
     phone_number_required: boolean;
     accepts_marketing_checkbox_option: string;
     tax_exempt_checkbox_enabled?: boolean;
     tax_shipping?: boolean;
-    batch_requests?: boolean;
+    rsa_enabled?: boolean;
 }
 export interface IAddressAutoComplete {
     provider: string | null;
@@ -377,8 +399,10 @@ export interface IExpressPayPaypalCommercePlatform {
     is_test: boolean;
     public_id: string;
     apple_pay_enabled: boolean;
+    google_pay_enabled: boolean;
     partner_id: string;
     merchant_id: string;
+    fastlane_styles: Record<string, unknown>;
 }
 export interface IExpressPayPaypalCommercePlatformButton {
     'public_id': string;
@@ -387,6 +411,7 @@ export interface IExpressPayPaypalCommercePlatformButton {
     'is_3ds_enabled': boolean;
     'style': Record<string, unknown>;
     'apple_pay_enabled': boolean;
+    'google_pay_enabled': boolean;
     'type': string;
     'merchant_country': string;
     'payment_types': Record<string, unknown>;
@@ -410,6 +435,13 @@ export interface IExpressPayBraintreeGoogle extends IExpressPayBraintree {
 export interface IExpressPayBraintreeApple extends IExpressPayBraintree {
     apple_pay_enabled: boolean;
 }
+export interface IExpressPayBraintreePayPal extends IExpressPayBraintree {
+    is_paylater_enabled: boolean;
+    properties: Record<string, unknown>;
+}
+export interface IExpressPayBraintreeFastlane extends IExpressPayBraintree {
+    fastlane_styles: Record<string, unknown>;
+}
 export interface IExternalPaymentGateway {
     is_test: boolean;
     iframe_url: string;
@@ -417,6 +449,11 @@ export interface IExternalPaymentGateway {
     public_id: string;
     location: string;
     currency: string;
+}
+export interface IFraudTool {
+    id: string;
+    type: string;
+    credentials: Record<string, unknown>;
 }
 export interface ILifeField {
     input_default: string | null;
@@ -458,6 +495,7 @@ export interface IApplicationState {
     is_processed: boolean;
     created_via: string;
     fees: Array<IFees>;
+    flow_id: string | null;
 }
 export interface IOrderMetaData {
     cart_parameters: ICartParameters;
@@ -633,10 +671,10 @@ export interface IValidateAddressRequest {
     business_name?: string;
     phone_number?: string;
 }
-export declare type IApiResponse = IApiErrorResponse | IApiErrorsResponse | IApiSuccessResponse | IApiAcceptedResponse;
-export declare type IApiSubrequestResponse = IApiSubrequestErrorsResponse | IApiSubrequestSuccessResponse;
-export declare type ISetShippingAddressRequest = IAddress;
-export declare type ISetBillingAddressRequest = IAddress;
+export type IApiResponse = IApiErrorResponse | IApiErrorsResponse | IApiSuccessResponse | IApiAcceptedResponse;
+export type IApiSubrequestResponse = IApiSubrequestErrorsResponse | IApiSubrequestSuccessResponse;
+export type ISetShippingAddressRequest = IAddress;
+export type ISetBillingAddressRequest = IAddress;
 export interface IAddPaymentRequest {
     gateway_public_id: string;
     amount?: number;
@@ -668,29 +706,35 @@ export interface IWalletPayOnApprovePaypalPayload {
 }
 export interface IWalletPayCreateOrderRequest {
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayCreateOrderPaypalPayload | Record<string, unknown>;
 }
 export interface IWalletPayOnShippingRequest {
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayOnShippingPaypalPayload | Record<string, unknown>;
 }
 export interface IWalletPayOnApproveRequest {
     gateway_type: string;
+    gateway_id?: number;
     payment_data: IWalletPayOnApprovePaypalPayload | Record<string, unknown>;
 }
-export declare type IUpdatePaymentRequest = IAddPaymentRequest;
-export declare type IDeletePaymentRequest = IAddPaymentRequest;
+export type IUpdatePaymentRequest = IAddPaymentRequest;
+export type IDeletePaymentRequest = IAddPaymentRequest;
+export type IEstimateTaxRequest = IAddress;
+export type IEstimateShippingLinesRequest = IAddress;
 export interface IPatchOrderMetaDataRequest {
     cart_parameters: ICartParameters | null;
     note_attributes: ICartParameters | null;
     notes: string | null;
     tags: Array<string> | null;
 }
-export declare type IGetApiOptionsBody = ISessionStartRequest | IAddGuestCustomerRequest | ILineItemRequest | ILineItemRequestWithSku | ILineItemRequestWithPlatformId | IValidateEmailRequest | ISetShippingAddressRequest | ISetBillingAddressRequest | IValidateAddressRequest | IChangeShippingLineRequest | IDiscountRequest | ICssStylingPaymentIframeRequest | IAddPaymentRequest | IUpdatePaymentRequest | IDeletePaymentRequest | IPatchOrderMetaDataRequest | IWalletPayOnApproveRequest | IWalletPayCreateOrderRequest | IWalletPayOnShippingRequest | IDispatchAppHookEventRequest | Record<string, unknown>;
+export type IGetApiOptionsBody = ISessionStartRequest | IAddGuestCustomerRequest | ILineItemRequest | ILineItemRequestWithSku | ILineItemRequestWithPlatformId | IValidateEmailRequest | ISetShippingAddressRequest | ISetBillingAddressRequest | IValidateAddressRequest | IChangeShippingLineRequest | IDiscountRequest | ICssStylingPaymentIframeRequest | IAddPaymentRequest | IUpdatePaymentRequest | IDeletePaymentRequest | IPatchOrderMetaDataRequest | IWalletPayOnApproveRequest | IWalletPayCreateOrderRequest | IWalletPayOnShippingRequest | IEstimateTaxRequest | IEstimateShippingLinesRequest | IDispatchAppHookEventRequest | Record<string, unknown>;
 export interface IShippingLine {
     id: string;
     description: string;
     amount: number;
+    code: string;
 }
 export interface IPigiActionType {
     actionType: string;
