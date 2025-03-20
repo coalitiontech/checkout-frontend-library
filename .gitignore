@@ -6,7 +6,7 @@
 build/
 node_modules/
 coverage/
-lib/
+#lib/
 e2e-tests/config.local.json
 
 npm-debug.log

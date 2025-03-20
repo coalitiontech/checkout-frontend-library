@@ -307,6 +307,7 @@ export interface IApiTypes {
     walletPayOnApprove: IApiTypesDetail,
     estimateShippingLines: IApiTypesDetail,
     estimateTaxes: IApiTypesDetail,
+    dispatchAppHookEvent: IApiTypesDetail,
 }
 
 export interface IApiTypeKeys {
@@ -348,6 +349,7 @@ export interface IApiTypeKeys {
     walletPayOnApprove: keyof  IApiTypes;
     estimateShippingLines: keyof  IApiTypes;
     estimateTaxes: keyof  IApiTypes;
+    dispatchAppHookEvent: keyof IApiTypes;
 }
 
 export interface IValidateAddress {
@@ -892,6 +894,7 @@ export type IGetApiOptionsBody =
     IWalletPayOnShippingRequest |
     IEstimateTaxRequest |
     IEstimateShippingLinesRequest |
+    IDispatchAppHookEventRequest |
     Record<string, unknown>;
 
 export interface IShippingLine {
@@ -926,3 +929,9 @@ export interface IInventoryFailedItems {
     platform_variant_id: string,
     available_quantity: number
 }
+
+export interface IDispatchAppHookEventRequest {
+    uuid: string;
+    hook: string;
+    app_hook_data?: object;
+ }
