@@ -213,7 +213,8 @@ export const patchOrderMetaDataMock: IPatchOrderMetaDataRequest = {
 export const selectShippingLineMock: IShippingLine = {
     id: 'test_select_shipping_line_id',
     description: 'Test Description',
-    amount: 100
+    amount: 100,
+    code: '',
 };
 
 export const availableShippingLineMock: IAvailableShippingLine = {
@@ -276,18 +277,21 @@ export const applicationStateMock: IApplicationState = {
     display_exchange_rate: 1,
     is_processed: false,
     created_via: 'checkout',
-    fees: [feesMock]
+    fees: [feesMock],
+    flow_id: 'mock_flow',
 };
 
 export const selectShippingLineArrayMock: Array<IShippingLine> = [
     {
         id: '1',
         description: 'First shipping line Option',
-        amount: 999
+        amount: 999,
+        code: '111',
     }, {
         id: '2',
         description: 'Second shipping line Option',
-        amount: 1500
+        amount: 1500,
+        code: '222'
     }
 ];
 
@@ -334,7 +338,8 @@ export const orderInitialDataMock: IOrderInitialData = {
         checkout_process: {
             company_name_option: 'required',
             phone_number_required: false,
-            accepts_marketing_checkbox_option: 'checked'
+            accepts_marketing_checkbox_option: 'checked',
+            rsa_enabled: false,
         },
         address_autocomplete: {
             provider: null,
@@ -352,8 +357,10 @@ export const orderInitialDataMock: IOrderInitialData = {
     ],
     external_payment_gateways: [],
     life_elements: [],
+    fraud_tools: [],
     flow_settings: {},
     requires_shipping: true,
+    eps_gateways: {},
 };
 
 export const cssRuleMock: ICssRule = {

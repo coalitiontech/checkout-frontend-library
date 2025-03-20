@@ -67,6 +67,7 @@ export const pigiActionTypes: IPigiActionTypes = {
     PIGI_PAYMENT_ADDED: 'PIGI_PAYMENT_ADDED',
     PIGI_DISPLAY_IN_FULL_PAGE: 'PIGI_DISPLAY_IN_FULL_PAGE',
     PIGI_DISPLAY_IN_FULL_PAGE_DONE: 'PIGI_DISPLAY_IN_FULL_PAGE_DONE',
+    PIGI_HIDE_CREDIT_CARD_OPTION: 'PIGI_HIDE_CREDIT_CARD_OPTION',
 };
 
 export const externalPaymentGatewayToParentActionTypes: IExternalPaymentGatewayToParentActionTypes = {
@@ -95,6 +96,7 @@ export const alternatePaymentMethodType: IAlternatePaymentMethodType = {
     BRAINTREE_GOOGLE: 'braintree',
     BRAINTREE_APPLE: 'braintree-apple',
     PPCP_APPLE: 'paypal_commerce_platform-apple',
+    PPCP_GOOGLE: 'paypal_commerce_platform-google',
     PPCP: 'paypal_commerce_platform',
 };
 
@@ -322,6 +324,18 @@ export const apiTypes: IApiTypes = {
         useJwt: true,
         keysToTest: [...appStateKeysToTest]
     },
+    estimateTaxes: {
+        path: '/taxes/estimate',
+        method: methods.POST,
+        useJwt: true,
+        keysToTest: [...appStateKeysToTest]
+    },
+    estimateShippingLines: {
+        path: '/shipping_lines/estimate',
+        method: methods.POST,
+        useJwt: true,
+        keysToTest: [...appStateKeysToTest]
+    },
 };
 
 export const apiTypeKeys: IApiTypeKeys = {
@@ -362,6 +376,8 @@ export const apiTypeKeys: IApiTypeKeys = {
     walletPayCreateOrder: 'walletPayCreateOrder',
     walletPayOnShipping: 'walletPayOnShipping',
     walletPayOnApprove: 'walletPayOnApprove',
+    estimateShippingLines: 'estimateShippingLines',
+    estimateTaxes: 'estimateTaxes',
 };
 
 export const baseReturnObject: IApiReturnObject = {
