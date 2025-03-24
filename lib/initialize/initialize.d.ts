@@ -1,4 +1,4 @@
-import { IApiReturnObject, IInitializeOrderResponse, IEnvironment } from "..";
+import { IApiReturnObject, IInitializeOrderResponse, IEnvironment, IInitializeSimpleOrderResponse } from "..";
 /**
  * # Initialize
  *
@@ -8,4 +8,4 @@ import { IApiReturnObject, IInitializeOrderResponse, IEnvironment } from "..";
  * @param shopIdentifier Identification for the shop in which the order is on
  * @param environment Set the environment where the library will be working on.
  */
-export declare function initialize(initData: IInitializeOrderResponse, shopIdentifier: string, environment: IEnvironment): Promise<IApiReturnObject>;
+export declare function initialize(initData: IInitializeOrderResponse | IInitializeSimpleOrderResponse, shopIdentifier: string, environment: IEnvironment): Promise<IApiReturnObject>;
