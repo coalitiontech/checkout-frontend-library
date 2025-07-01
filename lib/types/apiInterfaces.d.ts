@@ -78,6 +78,11 @@ export interface IInitializeSimpleOrderResponse {
     jwt_token: string;
     public_order_id: string;
 }
+export interface IInitializeSimpleOrderResponse {
+    flow_settings: Record<string, unknown>;
+    jwt_token: string;
+    public_order_id: string;
+}
 export interface ICssStylingPaymentIframeResponse {
     style_sheet: IStyleSheet;
 }
