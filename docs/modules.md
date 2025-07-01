@@ -12,7 +12,6 @@
 - [IAddress](interfaces/IAddress.md)
 - [IAddressAutoComplete](interfaces/IAddressAutoComplete.md)
 - [IAddressType](interfaces/IAddressType.md)
-- [IAlternatePaymentMethodType](interfaces/IAlternatePaymentMethodType.md)
 - [IApiAcceptedResponse](interfaces/IApiAcceptedResponse.md)
 - [IApiErrorResponse](interfaces/IApiErrorResponse.md)
 - [IApiErrors](interfaces/IApiErrors.md)
@@ -45,12 +44,6 @@
 - [IEnvironmentTypes](interfaces/IEnvironmentTypes.md)
 - [IEnvironmentUrls](interfaces/IEnvironmentUrls.md)
 - [IErrorFormat](interfaces/IErrorFormat.md)
-- [IExpressPayBraintree](interfaces/IExpressPayBraintree.md)
-- [IExpressPayBraintreeApple](interfaces/IExpressPayBraintreeApple.md)
-- [IExpressPayBraintreeGoogle](interfaces/IExpressPayBraintreeGoogle.md)
-- [IExpressPayPaypal](interfaces/IExpressPayPaypal.md)
-- [IExpressPayPaypalCommercePlatform](interfaces/IExpressPayPaypalCommercePlatform.md)
-- [IExpressPayStripe](interfaces/IExpressPayStripe.md)
 - [IExternalPayment](interfaces/IExternalPayment.md)
 - [IFee](interfaces/IFee.md)
 - [IFees](interfaces/IFees.md)
@@ -76,10 +69,6 @@
 - [IPatchOrderMetaDataResponse](interfaces/IPatchOrderMetaDataResponse.md)
 - [IPayment](interfaces/IPayment.md)
 - [IPaymentFrame](interfaces/IPaymentFrame.md)
-- [IPigi](interfaces/IPigi.md)
-- [IPigiActionType](interfaces/IPigiActionType.md)
-- [IPigiActionTypes](interfaces/IPigiActionTypes.md)
-- [IPigiResponseType](interfaces/IPigiResponseType.md)
 - [IProductData](interfaces/IProductData.md)
 - [IProvince](interfaces/IProvince.md)
 - [ISessionStartApiResponse](interfaces/ISessionStartApiResponse.md)
@@ -114,12 +103,6 @@
 - [IUpdatePaymentRequest](modules.md#iupdatepaymentrequest)
 
 ## Type Aliases
-
-### IAlternativePaymentMethod
-
-Ƭ **IAlternativePaymentMethod**: ([`IExpressPayStripe`](interfaces/IExpressPayStripe.md) \| [`IExpressPayPaypal`](interfaces/IExpressPayPaypal.md) \| [`IExpressPayBraintreeGoogle`](interfaces/IExpressPayBraintreeGoogle.md) \| [`IExpressPayBraintreeApple`](interfaces/IExpressPayBraintreeApple.md) \| [`IExpressPayPaypalCommercePlatform`](interfaces/IExpressPayPaypalCommercePlatform.md))[]
-
-___
 
 ### IApiResponse
 

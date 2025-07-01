@@ -9,6 +9,3 @@ export interface IAuth {
     csrfToken: string;
     jwtToken: string;
 }
-export interface IPigi {
-    iFrameId: string;
-}

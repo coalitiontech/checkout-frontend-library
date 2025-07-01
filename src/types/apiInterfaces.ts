@@ -66,23 +66,6 @@ export interface IMethods {
     DELETE: string;
 }
 
-export interface IPigiActionTypes {
-    PIGI_ADD_PAYMENT: string;
-    PIGI_REFRESH_ORDER: string;
-    PIGI_UPDATE_LANGUAGE: string;
-    PIGI_UPDATE_MEDIA_MATCH: string;
-    PIGI_DISPLAY_ERROR_MESSAGE: string;
-    PIGI_CLEAR_ERROR_MESSAGES: string;
-    PIGI_SELECT_PAYMENT_METHOD: string;
-    PIGI_INITIALIZED: string;
-    PIGI_UPDATE_HEIGHT: string;
-    PIGI_HANDLE_SCA: string;
-    PIGI_PAYMENT_ADDED: string;
-    PIGI_DISPLAY_IN_FULL_PAGE: string;
-    PIGI_DISPLAY_IN_FULL_PAGE_DONE: string;
-    PIGI_HIDE_CREDIT_CARD_OPTION: string;
-}
-
 export interface IExternalPaymentGatewayToParentActionTypes {
     EXTERNAL_PAYMENT_GATEWAY_ADD_PAYMENT: string;
     EXTERNAL_PAYMENT_GATEWAY_REFRESH_ORDER: string;
@@ -101,16 +84,6 @@ export interface IExternalPaymentGatewayToIframeActionTypes {
     EXTERNAL_PAYMENT_GATEWAY_SHIPPING_ADDRESS_CHANGED: string;
     EXTERNAL_PAYMENT_GATEWAY_HANDLE_SCA: string;
     EXTERNAL_PAYMENT_GATEWAY_SET_CONFIG: string;
-}
-
-export interface IAlternatePaymentMethodType {
-    STRIPE: string;
-    PAYPAL: string;
-    BRAINTREE_GOOGLE: string;
-    BRAINTREE_APPLE: string;
-    PPCP_APPLE: string;
-    PPCP_GOOGLE: string;
-    PPCP: string;
 }
 
 export type IInventoryStage = 'initial' | 'final';
@@ -135,7 +108,8 @@ export interface IInitializeOrderResponse {
     initial_data: IOrderInitialData,
     application_state: IApplicationState,
     jwt_token: string,
-    public_order_id: string
+    public_order_id: string,
+    vaulting_enabled: boolean,
 }
 
 export interface IInitializeSimpleOrderResponse {
@@ -299,6 +273,7 @@ export interface IApiTypes {
     updatePayment: IApiTypesDetail;
     deletePayment: IApiTypesDetail;
     deleteGiftCardPayment: IApiTypesDetail;
+    deletePaymentMethod: IApiTypesDetail;
     patchOrderMetaData: IApiTypesDetail;
     batchRequest: IApiTypesDetail;
     addLog: IApiTypesDetail;
@@ -341,6 +316,7 @@ export interface IApiTypeKeys {
     updatePayment: keyof  IApiTypes;
     deletePayment: keyof  IApiTypes;
     deleteGiftCardPayment: keyof  IApiTypes;
+    deletePaymentMethod: keyof IApiTypes;
     patchOrderMetaData: keyof IApiTypes;
     batchRequest: keyof IApiTypes;
     addLog: keyof IApiTypes;
@@ -393,7 +369,6 @@ export interface IApiTypesDetail {
     keysToTest?: Array<string>;
 }
 
-export type IAlternativePaymentMethod = Array<IExpressPayStripe | IExpressPayPaypal | IExpressPayBraintreeGoogle | IExpressPayBraintreeApple | IExpressPayPaypalCommercePlatform | IExpressPayPaypalCommercePlatformButton | IExpressPayBraintreePayPal | IExpressPayBraintreeFastlane> ;
 export type IExternalPaymentGateways = Array<IExternalPaymentGateway>;
 
 export interface IOrderInitialData {
@@ -401,7 +376,6 @@ export interface IOrderInitialData {
     country_info: Array<ICountryInformation>;
     supported_languages: Array<ISupportedLanguage>;
     general_settings: IGeneralSettings;
-    alternative_payment_methods: IAlternativePaymentMethod;
     external_payment_gateways:  IExternalPaymentGateways;
     life_elements: Array<ILifeField>;
     fraud_tools: Array<IFraudTool>;
@@ -444,7 +418,22 @@ export interface IEpsGateways {
 export interface IEpsGateway {
     auth_token: string;
     currency: string;
+    vaulted_payment_methods?: Array<IVaultedPaymentMethod>;
     group_label?: string;
+}
+
+export interface IVaultedPaymentMethod {
+    public_id: string;
+    eps_token: string;
+    tender_type: string;
+    tender: ITender;
+}
+
+export interface ITender {
+    brand: string;
+    last4: string;
+    exp_month: number;
+    exp_year: number;
 }
 
 export interface ICheckoutProcess{
@@ -465,78 +454,6 @@ export interface IGeneralSettings{
     checkout_process: ICheckoutProcess,
     address_autocomplete: IAddressAutoComplete,
 }
-
-export interface IExpressPayStripe {
-    type: string;
-    key: string;
-    stripe_user_id: string;
-    account_country: string;
-    public_id: string;
-}
-
-export interface IExpressPayPaypal {
-    type: string;
-    is_test: boolean;
-    client_id: string;
-    button_style: Record<string, unknown>;
-    public_id: string;
-}
-
-export interface IExpressPayPaypalCommercePlatform {
-    type: string;
-    is_test: boolean;
-    public_id: string;
-    apple_pay_enabled: boolean;
-    google_pay_enabled: boolean;
-    partner_id: string;
-    merchant_id: string;
-    fastlane_styles: Record<string, unknown>
-}
-
-export interface IExpressPayPaypalCommercePlatformButton {
-    'public_id': string,
-    'merchant_id': string,
-    'partner_id': string,
-    'is_3ds_enabled': boolean,
-    'style': Record<string, unknown>,
-    'apple_pay_enabled': boolean,
-    'google_pay_enabled': boolean;
-    'type': string,
-    'merchant_country': string,
-    'payment_types': Record<string, unknown>,
-    'is_dev': boolean
-}
-
-export interface IExpressPayBraintree {
-    type: string;
-    public_id: string;
-    is_test: boolean;
-    merchant_account: string;
-    tokenization_key: string;
-    button_style: Record<string, unknown>;
-}
-
-export interface IExpressPayBraintreeGoogle extends IExpressPayBraintree {
-    google_pay_enabled: boolean;
-    google_pay_merchant_identifier: string;
-    apiVersion: string;
-    sdkVersion: string;
-    merchantId: string;
-}
-
-export interface IExpressPayBraintreeApple extends IExpressPayBraintree {
-    apple_pay_enabled: boolean;
-}
-
-export interface IExpressPayBraintreePayPal extends IExpressPayBraintree {
-    is_paylater_enabled: boolean;
-    properties: Record<string, unknown>
-}
-
-export interface IExpressPayBraintreeFastlane extends IExpressPayBraintree {
-    fastlane_styles: Record<string, unknown>
-}
-
 
 export interface IExternalPaymentGateway {
     is_test: boolean;
@@ -904,19 +821,9 @@ export interface IShippingLine {
     code: string;
 }
 
-export interface IPigiActionType {
-    actionType: string;
-    payload?: Record<string, unknown>;
-}
-
 export interface IExternalPaymentGatewayActionType {
     type: string;
     payload?: IInitializeOrderResponse | IExternalPaymentGateway | IExternalPaymentGatewayLanguage | IAddress;
-}
-
-export interface IPigiResponseType {
-    responseType: string;
-    payload: Record<string, unknown>;
 }
 
 export interface IInventoryCheck {

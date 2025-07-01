@@ -1,4 +1,4 @@
-export { environmentTypes, environmentUrls, keysToTestFromResponse, environmentPath, generalApiResponseParsingErrorType, methods, pigiActionTypes, externalPaymentGatewayToParentActionTypes, externalPaymentGatewayToIframeActionTypes, apiTypes, apiTypeKeys, apiErrors, httpStatusCode, baseReturnObject, checkInventoryStage, alternatePaymentMethodType } from './variables/constants';
+export { environmentTypes, environmentUrls, keysToTestFromResponse, environmentPath, generalApiResponseParsingErrorType, methods, externalPaymentGatewayToParentActionTypes, externalPaymentGatewayToIframeActionTypes, apiTypes, apiTypeKeys, apiErrors, httpStatusCode, baseReturnObject, checkInventoryStage, } from './variables/constants';
 export * from './initialize';
 export * from './items';
 export * from './environment';
@@ -12,11 +12,10 @@ export * from './shipping';
 export * from './taxes';
 export * from './discounts';
 export * from './payment';
+export * from './paymentMethod';
 export * from './orderMetaData';
-export * from './paymentIframe';
 export * from './order';
 export * from './externalPaymentGateway';
 export * from './walletPay';
 export { getApplicationState, getAddresses, getBillingAddress, getCustomer, getDiscounts, getLineItems, getOrderMetaData, getPayments, getShipping, getShippingAddress, getTaxes, getFees, getOrderInitialData, getCurrency } from './state';
-export * from './pigi';
 export * from './log';

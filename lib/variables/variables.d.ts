@@ -1,7 +1,6 @@
-import { IEnvironment, IAuth, IApplicationState, IAddress, IAddressType, ICustomer, ILineItem, ITax, IDiscount, IPayment, IPigi, IOrderMetaData, IShipping, ICurrency, IOrderInitialData, ICountryInformation, IGeneralSettings, ISupportedLanguage, IFees } from "..";
+import { IEnvironment, IAuth, IApplicationState, IAddress, IAddressType, ICustomer, ILineItem, ITax, IDiscount, IPayment, IOrderMetaData, IShipping, ICurrency, IOrderInitialData, ICountryInformation, IGeneralSettings, ISupportedLanguage, IFees } from "..";
 export declare const environment: Required<IEnvironment>;
 export declare const auth: IAuth;
-export declare const pigi: IPigi;
 export declare const customer: ICustomer;
 export declare const shippingAddress: IAddress;
 export declare const billingAddress: IAddress;

@@ -9,9 +9,6 @@ import {
     IHttpStatusCode,
     ICheckInventoryStage,
     IMethods,
-    IPigiActionTypes,
-    IPigiResponseType,
-    IAlternatePaymentMethodType,
     IExternalPaymentGatewayToParentActionTypes,
     IExternalPaymentGatewayToIframeActionTypes
 } from 'src';
@@ -53,23 +50,6 @@ export const methods: IMethods = {
     DELETE: 'DELETE'
 };
 
-export const pigiActionTypes: IPigiActionTypes = {
-    PIGI_ADD_PAYMENT: 'PIGI_ADD_PAYMENT',
-    PIGI_REFRESH_ORDER: 'PIGI_REFRESH_ORDER',
-    PIGI_UPDATE_LANGUAGE: 'PIGI_UPDATE_LANGUAGE',
-    PIGI_UPDATE_MEDIA_MATCH: 'PIGI_UPDATE_MEDIA_MATCH',
-    PIGI_DISPLAY_ERROR_MESSAGE: 'PIGI_DISPLAY_ERROR_MESSAGE',
-    PIGI_CLEAR_ERROR_MESSAGES: 'PIGI_CLEAR_ERROR_MESSAGES',
-    PIGI_SELECT_PAYMENT_METHOD: 'PIGI_SELECT_PAYMENT_METHOD',
-    PIGI_INITIALIZED: 'PIGI_INITIALIZED',
-    PIGI_UPDATE_HEIGHT: 'PIGI_UPDATE_HEIGHT',
-    PIGI_HANDLE_SCA: 'PIGI_HANDLE_SCA',
-    PIGI_PAYMENT_ADDED: 'PIGI_PAYMENT_ADDED',
-    PIGI_DISPLAY_IN_FULL_PAGE: 'PIGI_DISPLAY_IN_FULL_PAGE',
-    PIGI_DISPLAY_IN_FULL_PAGE_DONE: 'PIGI_DISPLAY_IN_FULL_PAGE_DONE',
-    PIGI_HIDE_CREDIT_CARD_OPTION: 'PIGI_HIDE_CREDIT_CARD_OPTION',
-};
-
 export const externalPaymentGatewayToParentActionTypes: IExternalPaymentGatewayToParentActionTypes = {
     EXTERNAL_PAYMENT_GATEWAY_ADD_PAYMENT: 'EXTERNAL_PAYMENT_GATEWAY_ADD_PAYMENT',
     EXTERNAL_PAYMENT_GATEWAY_REFRESH_ORDER: 'EXTERNAL_PAYMENT_GATEWAY_REFRESH_ORDER',
@@ -88,16 +68,6 @@ export const externalPaymentGatewayToIframeActionTypes: IExternalPaymentGatewayT
     EXTERNAL_PAYMENT_GATEWAY_SHIPPING_ADDRESS_CHANGED: 'EXTERNAL_PAYMENT_GATEWAY_SHIPPING_ADDRESS_CHANGED',
     EXTERNAL_PAYMENT_GATEWAY_UPDATE_STATE: 'EXTERNAL_PAYMENT_GATEWAY_UPDATE_STATE',
     EXTERNAL_PAYMENT_GATEWAY_SET_CONFIG: 'EXTERNAL_PAYMENT_GATEWAY_SET_CONFIG',
-};
-
-export const alternatePaymentMethodType: IAlternatePaymentMethodType = {
-    STRIPE: 'stripe',
-    PAYPAL: 'paypal',
-    BRAINTREE_GOOGLE: 'braintree',
-    BRAINTREE_APPLE: 'braintree-apple',
-    PPCP_APPLE: 'paypal_commerce_platform-apple',
-    PPCP_GOOGLE: 'paypal_commerce_platform-google',
-    PPCP: 'paypal_commerce_platform',
 };
 
 export const checkInventoryStage: ICheckInventoryStage = {
@@ -288,6 +258,12 @@ export const apiTypes: IApiTypes = {
         useJwt: true,
         keysToTest: [...appStateKeysToTest]
     },
+    deletePaymentMethod: {
+        path: '/payments/saved',
+        method: methods.DELETE,
+        useJwt: true,
+        keysToTest: [...appStateKeysToTest]
+    },
     patchOrderMetaData: {
         path: '/meta_data',
         method: methods.PATCH,
@@ -370,6 +346,7 @@ export const apiTypeKeys: IApiTypeKeys = {
     updatePayment: 'updatePayment',
     deletePayment: 'deletePayment',
     deleteGiftCardPayment: 'deleteGiftCardPayment',
+    deletePaymentMethod: 'deletePaymentMethod',
     patchOrderMetaData: 'patchOrderMetaData',
     batchRequest: 'batchRequest',
     addLog: 'addLog',
@@ -390,7 +367,6 @@ export const baseReturnObject: IApiReturnObject = {
 export const apiErrors: IApiErrors = {
     general: {status: 1000, message: 'General error thrown'},
     noCsrf: {status: 1001, message: 'CSRF Token not found'},
-    noPigiIframe: {status: 1002, message: 'PIGI iframe not found or empty'},
     /*
      * API RESPONSE - checkApiResponse function ERRORS
      *
@@ -406,14 +382,6 @@ export const apiErrors: IApiErrors = {
     emptyAppState: {status: 1101, message: 'Application state is empty in response'},
     noResData: {status: 1200, message: 'Data not found in response'},
     emptyResData: {status: 1201, message: 'Data is empty in response'},
-};
-
-export const basePigiResponseType: IPigiResponseType = {
-    responseType: '',
-    payload: {
-        success: false,
-        height: 0
-    }
 };
 
 export const httpStatusCode: IHttpStatusCode = {
